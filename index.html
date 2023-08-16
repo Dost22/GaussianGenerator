@@ -90,6 +90,7 @@
 
   <script>
     function generateHistogram() {
+      // Clear previous histogram
       d3.select("#histogram").selectAll("*").remove();
 
       const mu = parseFloat(document.getElementById("mu").value);
@@ -123,13 +124,13 @@
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
-        .attr("transform", `translate(${margin.left}, ${margin.top})`);
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
       const bar = svg.selectAll(".bar")
         .data(bins)
         .enter().append("g")
         .attr("class", "bar")
-        .attr("transform", d => `translate(${x(d.x0)}, ${y(d.length)})`);
+        .attr("transform", d => "translate(" + x(d.x0) + "," + y(d.length) + ")");
 
       bar.append("rect")
         .attr("x", (binWidth - barWidth) / 2)
@@ -137,7 +138,7 @@
         .attr("height", d => height - y(d.length));
 
       svg.append("g")
-        .attr("transform", `translate(0, ${height})`)
+        .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x).tickSizeOuter(0));
 
       svg.append("g")
