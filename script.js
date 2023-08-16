@@ -31,8 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const squaredDifferences = dataset.map(value => Math.pow(value - mean, 2));
     const variance = squaredDifferences.reduce((acc, value) => acc + value, 0) / dataset.length;
     const stdDev = Math.sqrt(variance);
-    const minima = min(...dataset);
-    const maxima = max(...dataset);
+    const minima = Math.min(...dataset);
+    const maxima = Math.max(...dataset);
     return {
       mean,
       variance,
@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function () {
       <p>Variance: ${metrics.variance.toFixed(3)}</p>
       <p>Standard Deviation: ${metrics.stdDev.toFixed(3)}</p>
       <p>Sum: ${metrics.sum.toFixed(3)}</p>
-      <p>Squared Differences: ${metrics.squaredDifferences.toFixed(3)}</p>
       <p>Minima: ${metrics.minima.toFixed(3)}</p>
       <p>Maxima: ${metrics.maxima.toFixed(3)}</p>
     `;
