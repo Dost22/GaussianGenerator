@@ -79,9 +79,9 @@
 
       const values = Array.from({ length: numValues }, () => d3.randomNormal(mu, sigma)());
 
-      const margin = { top: 40, right: 30, bottom: 70, left: 70 };
-      const width = window.innerWidth - margin.left - margin.right;
-      const height = window.innerHeight - margin.top - margin.bottom;
+      const margin = { top: 20, right: 30, bottom: 50, left: 50 };
+      const width = 1200 - margin.left - margin.right;
+      const height = 675 - margin.top - margin.bottom;
 
       const x = d3.scaleLinear()
         .domain(d3.extent(values))
@@ -125,9 +125,6 @@
 
       d3.selectAll(".axis text").attr("font-family", "Arial, sans-serif");
     }
-
-    // Call the function initially to generate the histogram
-    generateHistogram();
   </script>
 </body>
 </html>
