@@ -89,7 +89,62 @@
   </div>
 
   <script>
-    // ... (your JavaScript code) ...
+    function generateHistogram() {
+      d3.select("#histogram").selectAll("*").remove();
+
+      const mu = parseFloat(document.getElementById("mu").value);
+      const sigma = parseFloat(document.getElementById("sigma").value);
+      const numValues = parseInt(document.getElementById("numValues").value);
+      const barWidth = parseFloat(document.getElementById("barWidth").value);
+
+      const values = Array.from({ length: numValues }, () => d3.randomNormal(mu, sigma)());
+
+      const margin = { top: 20, right: 30, bottom: 50, left: 50 };
+      const width = window.innerWidth - margin.left - margin.right;
+      const height = window.innerHeight - margin.top - margin.bottom;
+
+      const x = d3.scaleLinear()
+        .domain(d3.extent(values))
+        .range([0, width]);
+
+      const binsGenerator = d3.histogram()
+        .domain(x.domain())
+        .thresholds(x.ticks(20));
+
+      const bins = binsGenerator(values);
+      const binWidth = x(bins[0].x1) - x(bins[0].x0);
+
+      const y = d3.scaleLinear()
+        .domain([0, d3.max(bins, d => d.length)])
+        .nice()
+        .range([height, 0]);
+
+      const svg = d3.select("#histogram")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+      const bar = svg.selectAll(".bar")
+        .data(bins)
+        .enter().append("g")
+        .attr("class", "bar")
+        .attr("transform", d => `translate(${x(d.x0)}, ${y(d.length)})`);
+
+      bar.append("rect")
+        .attr("x", (binWidth - barWidth) / 2)
+        .attr("width", barWidth)
+        .attr("height", d => height - y(d.length));
+
+      svg.append("g")
+        .attr("transform", `translate(0, ${height})`)
+        .call(d3.axisBottom(x).tickSizeOuter(0));
+
+      svg.append("g")
+        .call(d3.axisLeft(y).tickSizeOuter(0));
+
+      d3.selectAll(".axis text").attr("font-family", "Arial, sans-serif");
+    }
   </script>
 </body>
 </html>
