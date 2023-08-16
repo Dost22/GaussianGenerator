@@ -31,11 +31,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const squaredDifferences = dataset.map(value => Math.pow(value - mean, 2));
     const variance = squaredDifferences.reduce((acc, value) => acc + value, 0) / dataset.length;
     const stdDev = Math.sqrt(variance);
-
+    const minima = min(...dataset)
+    const maxima = max(...dataset)
     return {
       mean,
       variance,
-      stdDev
+      stdDev,
+      sum,
+      squearedDifferences,
+      minima,
+      maxima,
     };
   }
 
