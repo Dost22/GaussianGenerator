@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
       variance,
       stdDev,
       sum,
-      squearedDifferences,
+      squaredDifferences,
       minima,
       maxima,
     };
@@ -49,6 +49,10 @@ document.addEventListener('DOMContentLoaded', function () {
       <p>Mean: ${metrics.mean.toFixed(2)}</p>
       <p>Variance: ${metrics.variance.toFixed(2)}</p>
       <p>Standard Deviation: ${metrics.stdDev.toFixed(2)}</p>
+      <p>Sum: ${metrics.sum.toFixed(2)}</p>
+      <p>Squared Differences: ${metrics.squaredDifferences(2)}</p>
+      <p>Minima: ${metrics.minima.toFixed(2)}</p>
+      <p>Maxima: ${metrics.maxima.toFixed(2)}</p>
     `;
   }
 
