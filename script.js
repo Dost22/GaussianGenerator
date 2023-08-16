@@ -46,13 +46,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function displayMetrics(metrics) {
     metricsOutput.innerHTML = `
-      <p>Mean: ${metrics.mean.toFixed(2)}</p>
-      <p>Variance: ${metrics.variance.toFixed(2)}</p>
-      <p>Standard Deviation: ${metrics.stdDev.toFixed(2)}</p>
-      <p>Sum: ${metrics.sum.toFixed(2)}</p>
-      <p>Squared Differences: ${metrics.squaredDifferences(2)}</p>
-      <p>Minima: ${metrics.minima.toFixed(2)}</p>
-      <p>Maxima: ${metrics.maxima.toFixed(2)}</p>
+      <p>Mean: ${metrics.mean.toFixed(3)}</p>
+      <p>Variance: ${metrics.variance.toFixed(3)}</p>
+      <p>Standard Deviation: ${metrics.stdDev.toFixed(3)}</p>
+      <p>Sum: ${metrics.sum.toFixed(3)}</p>
+      <p>Squared Differences: ${metrics.squaredDifferences.toFixed(3)}</p>
+      <p>Minima: ${metrics.minima.toFixed(3)}</p>
+      <p>Maxima: ${metrics.maxima.toFixed(3)}</p>
     `;
   }
 
