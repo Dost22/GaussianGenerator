@@ -7,24 +7,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
   generateBtn.addEventListener('click', function () {
     const N = parseInt(inputN.value);
-    const dataset = generateDataset(N);
+    const dataset = generateGaussianData(N,0,1);
     const metrics = calculateMetrics(dataset);
 
     displayMetrics(metrics);
     displayHistogram(dataset);
     displayTable(dataset);
   });
-
-  function generateDataset(N) {
-    const dataset = [];
-
-    for (let i = 0; i < N; i++) {
-      dataset.push(Math.random());
-    }
-
-    return dataset;
+  function generateGaussianData(numSamples, mean, stddev) {
+      const gaussianData = [];
+      for (let i = 0; i < numSamples; i++) {
+          const value = mean + stddev * (2 * Math.random() - 1);
+          gaussianData.push(Math.max(0, Math.min(1, value))); 
+      }
+      return gaussianData;
   }
-
   function calculateMetrics(dataset) {
     const sum = dataset.reduce((acc, value) => acc + value, 0);
     const mean = sum / dataset.length;
@@ -58,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
   let histogramChartInstance = null;
 
   function displayHistogram(dataset) {
-    const histogramData = Array.from({ length: 101 }, () => 0); // 0 to 1, 101 bins
+    const histogramData = Array.from({ length: 101 }, () => 0);
 
     for (const value of dataset) {
       const binIndex = Math.floor(value * 100);
@@ -93,10 +90,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Add event listener to toggle the table collapse
   const toggleTableBtn = document.getElementById('toggleTableBtn');
   toggleTableBtn.addEventListener('click', function () {
-    $('#tableCollapse').collapse('toggle'); // Use jQuery to toggle collapse state
+    $('#tableCollapse').collapse('toggle'); 
   });
 
   function displayTable(dataset) {
