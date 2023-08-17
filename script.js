@@ -14,13 +14,16 @@ document.addEventListener('DOMContentLoaded', function () {
     displayHistogram(dataset);
     displayTable(dataset);
   });
+  function randomNormal() {
+      return Math.cos(2 * Math.PI * Math.random()) * Math.sqrt(-2 * Math.log(Math.random()));
+  }
   function generateGaussianData(numSamples, mean, stddev) {
-      const gaussianData = [];
-      for (let i = 0; i < numSamples; i++) {
-          const value = mean + stddev * (2 * Math.random() - 1);
-          gaussianData.push(Math.max(0, Math.min(1, value))); 
-      }
-      return gaussianData;
+    const gaussianData = [];
+    for (let i = 0; i < numSamples; i++) {
+        const value = mean + stddev * randomNormal();
+        gaussianData.push(Math.max(0, Math.min(1, value))); 
+    }
+    return gaussianData;
   }
   function calculateMetrics(dataset) {
     const sum = dataset.reduce((acc, value) => acc + value, 0);
