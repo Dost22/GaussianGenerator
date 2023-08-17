@@ -5,23 +5,27 @@ document.addEventListener('DOMContentLoaded', function () {
   const histogramChart = document.getElementById('histogramChart');
   const tableOutput = document.querySelector('#tableOutput tbody');
   const Bars = document.getElementById('Bars');
+
+  let histogramChartInstance = null;
+
   generateBtn.addEventListener('click', function () {
     const N = parseInt(inputN.value);
     const BIN = parseInt(Bars.value);
-    const dataset = generateGaussianData(N, 0, 1);
+    const dataset = generateGaussianData(N);
     const metrics = calculateMetrics(dataset);
     displayMetrics(metrics);
-    displayHistogram(dataset,BIN);
+    displayHistogram(dataset, BIN);
     displayTable(dataset);
   });
+
   function randomNormal() {
     return Math.cos(2 * Math.PI * Math.random()) * Math.sqrt(-2 * Math.log(Math.random()));
   }
-  function generateGaussianData(numSamples, mean, stddev) {
+
+  function generateGaussianData(numSamples) {
     const gaussianData = [];
     for (let i = 0; i < numSamples; i++) {
       const value = (randomNormal() / 2 + 1);
-      //zi = (xi – min(x)) / (max(x) – min(x))
       gaussianData.push(value);
     }
     var mini = Math.min(...gaussianData);
@@ -31,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     return gaussianData;
   }
+
   function calculateMetrics(dataset) {
     const sum = dataset.reduce((acc, value) => acc + value, 0);
     const mean = sum / dataset.length;
@@ -61,47 +66,41 @@ document.addEventListener('DOMContentLoaded', function () {
     `;
   }
 
-  let histogramChartInstance = null;
-  function displayHistogram(dataset,BIN) {
-    const histogramData = Array.from({ length: BIN+1 }, () => 0);
+  function displayHistogram(dataset, BIN) {
+    const histogramData = Array.from({ length: BIN }, () => 0);
     const minima = Math.min(...dataset);
     for (const value of dataset) {
-      const binIndex = Math.floor(value/(1/BIN));
+      const binIndex = Math.floor(value / (1 / BIN));
       histogramData[binIndex]++;
     }
 
     if (histogramChartInstance) {
-      histogramChartInstance.data.datasets[0].data = histogramData;
-      histogramChartInstance.update();
-    } else {
-      const ctx = histogramChart.getContext('2d');
-      histogramChartInstance = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: Array.from({ length: BIN+1 }, (_, i) => (i / BIN).toFixed(2)),
-          datasets: [{
-            label: 'Occurrences',
-            data: histogramData,
-            backgroundColor: 'rgba(255, 0, 0, 0.7)',
-            borderColor: 'rgba(0,0,0, 1)',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
+      histogramChartInstance.destroy();
+      histogramChartInstance = null;
+    }
+
+    const ctx = histogramChart.getContext('2d');
+    histogramChartInstance = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: Array.from({ length: BIN }, (_, i) => (i / BIN).toFixed(2)),
+        datasets: [{
+          label: 'Occurrences',
+          data: histogramData,
+          backgroundColor: 'rgba(255, 0, 0, 0.7)',
+          borderColor: 'rgba(0,0,0, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
           }
         }
-      });
-    }
+      }
+    });
   }
-
-  const toggleTableBtn = document.getElementById('toggleTableBtn');
-  toggleTableBtn.addEventListener('click', function () {
-    $('#tableCollapse').collapse('toggle');
-  });
 
   function displayTable(dataset) {
     tableOutput.innerHTML = '';
