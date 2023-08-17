@@ -4,10 +4,10 @@ document.addEventListener('DOMContentLoaded', function () {
   const metricsOutput = document.getElementById('metricsOutput');
   const histogramChart = document.getElementById('histogramChart');
   const tableOutput = document.querySelector('#tableOutput tbody');
-
   generateBtn.addEventListener('click', function () {
     const N = parseInt(inputN.value);
-    const dataset = generateGaussianData(N,0,1);
+    const dataset = generateGaussianData(N, 0, 1);
+    console.log(dataset);
     const metrics = calculateMetrics(dataset);
 
     displayMetrics(metrics);
@@ -15,13 +15,19 @@ document.addEventListener('DOMContentLoaded', function () {
     displayTable(dataset);
   });
   function randomNormal() {
-      return Math.cos(2 * Math.PI * Math.random()) * Math.sqrt(-2 * Math.log(Math.random()));
+    return Math.cos(2 * Math.PI * Math.random()) * Math.sqrt(-2 * Math.log(Math.random()));
   }
   function generateGaussianData(numSamples, mean, stddev) {
     const gaussianData = [];
     for (let i = 0; i < numSamples; i++) {
-        const value = mean + stddev * randomNormal();
-        gaussianData.push(Math.max(0, Math.min(1, value))); 
+      const value = (randomNormal()/2+1);
+      //zi = (xi – min(x)) / (max(x) – min(x))
+      gaussianData.push(value);
+    }
+    var mini = Math.min(...gaussianData);
+    var maxi = Math.max(...gaussianData);
+    for (var i =0;i<numSamples;i++) {
+      gaussianData[i] = (gaussianData[i]-mini)/(maxi-mini);
     }
     return gaussianData;
   }
@@ -56,7 +62,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   let histogramChartInstance = null;
-
   function displayHistogram(dataset) {
     const histogramData = Array.from({ length: 101 }, () => 0);
 
@@ -95,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const toggleTableBtn = document.getElementById('toggleTableBtn');
   toggleTableBtn.addEventListener('click', function () {
-    $('#tableCollapse').collapse('toggle'); 
+    $('#tableCollapse').collapse('toggle');
   });
 
   function displayTable(dataset) {
