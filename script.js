@@ -4,14 +4,14 @@ document.addEventListener('DOMContentLoaded', function () {
   const metricsOutput = document.getElementById('metricsOutput');
   const histogramChart = document.getElementById('histogramChart');
   const tableOutput = document.querySelector('#tableOutput tbody');
+  const Bars = document.getElementById('Bars');
   generateBtn.addEventListener('click', function () {
     const N = parseInt(inputN.value);
+    const BIN = parseInt(Bars.value);
     const dataset = generateGaussianData(N, 0, 1);
-    console.log(dataset);
     const metrics = calculateMetrics(dataset);
-
     displayMetrics(metrics);
-    displayHistogram(dataset);
+    displayHistogram(dataset,BIN);
     displayTable(dataset);
   });
   function randomNormal() {
@@ -20,14 +20,14 @@ document.addEventListener('DOMContentLoaded', function () {
   function generateGaussianData(numSamples, mean, stddev) {
     const gaussianData = [];
     for (let i = 0; i < numSamples; i++) {
-      const value = (randomNormal()/2+1);
+      const value = (randomNormal() / 2 + 1);
       //zi = (xi – min(x)) / (max(x) – min(x))
       gaussianData.push(value);
     }
     var mini = Math.min(...gaussianData);
     var maxi = Math.max(...gaussianData);
-    for (var i =0;i<numSamples;i++) {
-      gaussianData[i] = (gaussianData[i]-mini)/(maxi-mini);
+    for (var i = 0; i < numSamples; i++) {
+      gaussianData[i] = (gaussianData[i] - mini) / (maxi - mini);
     }
     return gaussianData;
   }
@@ -62,11 +62,11 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   let histogramChartInstance = null;
-  function displayHistogram(dataset) {
-    const histogramData = Array.from({ length: 101 }, () => 0);
-
+  function displayHistogram(dataset,BIN) {
+    const histogramData = Array.from({ length: BIN+1 }, () => 0);
+    const minima = Math.min(...dataset);
     for (const value of dataset) {
-      const binIndex = Math.floor(value * 100);
+      const binIndex = Math.floor(value/(1/BIN));
       histogramData[binIndex]++;
     }
 
@@ -78,12 +78,12 @@ document.addEventListener('DOMContentLoaded', function () {
       histogramChartInstance = new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: Array.from({ length: 101 }, (_, i) => (i / 100).toFixed(2)),
+          labels: Array.from({ length: BIN+1 }, (_, i) => (i / BIN).toFixed(2)),
           datasets: [{
             label: 'Occurrences',
             data: histogramData,
-            backgroundColor: 'rgba(75, 192, 192, 0.7)',
-            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(255, 0, 0, 0.7)',
+            borderColor: 'rgba(0,0,0, 1)',
             borderWidth: 1
           }]
         },
